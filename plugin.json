@@ -1,0 +1,8 @@
+{
+	"name": "MidiToolpathReader",
+	"author": "Ghostkeeper",
+	"version": "0.0.1",
+	"description": "Reads MIDI files and produces toolpaths for the printer to play the tunes with stepper motors.",
+	"api": 7,
+	"supported_sdk_versions": ["7.0.0"]
+}
