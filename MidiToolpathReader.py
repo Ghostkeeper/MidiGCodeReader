@@ -9,12 +9,18 @@ import cura.Scene.GCodeListDecorator  # To store the output g-code.
 import cura.Scene.CuraSceneNode  # To create a mesh node in the scene as result of our read.
 import UM.Backend.Backend  # To disable slicing while the toolpath is loaded.
 import UM.Mesh.MeshReader  # The class we're extending.
+import UM.MimeTypeDatabase  # To register the file type.
 from . import MidiReader  # To read the symbols from the MIDI files.
 from . import Muxer  # To interweave the tracks from the MIDI file.
 from . import SpeedVectors  # To convert the notes to speed vectors.
 from . import PathGenerator  # Plan the paths within the build volume.
 
-class MidiToolpathReader(UM.Mesh.MeshReader):
+class MidiToolpathReader(UM.Mesh.MeshReader.MeshReader):
+	def __init__(self):
+		super().__init__()
+		self._supported_extensions = ["mid", "midi"]
+		UM.MimeTypeDatabase.MimeTypeDatabase.addMimeType(UM.MimeTypeDatabase.MimeType(name="audio/midi", comment="MIDI Audio File", suffixes=self._supported_extensions))
+
 	def _read(self, file_name) -> cura.Scene.CuraSceneNode.CuraSceneNode:
 		tracks = MidiReader.MidiReader.read_midi(file_name)  # First read the MIDI notes from the file.
 		tones = Muxer.Muxer.mux(tracks)  # Interweave these MIDI notes into one single track with multi-dimensional notes.
